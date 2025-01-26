@@ -14,7 +14,7 @@ class TestGrammarAndParser(unittest.TestCase):
     def test_integratingChangesToGrammar(self):
         shouldOutputVerboseDetails = True #Enables printing of lexer results and parse trees.
         useRevisedGrammar = True #Set to False if you want to see how much progress we made over the original grammar
-        testAgainstFoundations = True #Set to True if you want to run against all the cards in the Foundations set, False for custom list of strings
+        testAgainstFoundations = False #Set to True if you want to run against all the cards in the Foundations set, False for custom list of strings
         lexerTypeToUse = "basic" #Note: If using the original grammar, lexing will always be done in dynamic mode.
         skipCardsThatPreviouslyPassed = True #When testing against Foundations cards, output a file with a list of cards that previously passed, and skip those that passed before.
 
@@ -49,7 +49,8 @@ class TestGrammarAndParser(unittest.TestCase):
         parser = compilerUsingIntegratedGrammar.getParser()
         preprocessor = compilerUsingIntegratedGrammar.getPreprocessor()
         cardsToTest = [
-            ("Curator of Destinies Snippet", "Put that pile into your hand and the other into your graveyard."),
+            ("Kaito Snippet", "You get an emblem with \"Whenever a player casts a spell, you create a 2/1 blue Ninja creature token.\""), #There's no period at the end of the statement.
+            ("Curator of Destinies Snippet", "Put that pile into your hand and the other into your graveyard."), # the 'and' breaks up two objects of the expression
             ("Squad Rallier Snippet", "{2}{W}: Look at the top four cards of your library."),
             ("Landfall Parsing Test", "Landfall — Draw a card."),
             ("Grappling Kraken Snippet","Whenever a land you control enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)"),
@@ -86,6 +87,10 @@ class TestGrammarAndParser(unittest.TestCase):
                 if "text" in cardDict:
                     preprocessedText = preprocessor.prelex(cardDict['text'], None, name)
                     cardsToTest.append((name,preprocessedText))
+        else:
+            for i in range(len(cardsToTest)):
+                name, cardtext = cardsToTest[i]
+                cardsToTest[i] = (name,preprocessor.prelex(cardtext, None, name))
         print("Total card texts to test against: {total}".format(total=len(cardsToTest)))
         def getLexerResults(card,name):
             lexerState = lark.lexer.LexerState(text=card, line_ctr=lark.lexer.LineCounter(

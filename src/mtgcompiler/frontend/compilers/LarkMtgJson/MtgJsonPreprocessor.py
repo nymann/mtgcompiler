@@ -51,6 +51,12 @@ class MtgJsonPreprocessor(BasePreprocessor):
                 inputobj = caseInsensitiveReplace("each draw","draw",inputobj)
                 inputobj = caseInsensitiveReplace("each discard","discard",inputobj)
                 inputobj = caseInsensitiveReplace("each sacrifice","sacrifice",inputobj)
+
+                #There's a problem with not having periods at the end of sentences with quoted abilities. In English
+                #orthography if there's a period inside a quoted phrase at the end of a sentence, a separate period is
+                #not needed afterwards. Since we count on periods to know when a statement is complete, we need to add
+                #a second period.
+                inputobj = caseInsensitiveReplace(".\"", ".\".", inputobj)
                 
                 return inputobj
                 
