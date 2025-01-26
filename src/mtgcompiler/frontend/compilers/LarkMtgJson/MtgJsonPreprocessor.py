@@ -37,6 +37,7 @@ class MtgJsonPreprocessor(BasePreprocessor):
                 inputobj = caseInsensitiveReplace("don't","do not",inputobj)
                 inputobj = caseInsensitiveReplace("doesn't","does not",inputobj)
                 inputobj = caseInsensitiveReplace("can't","can not",inputobj)
+                inputobj = caseInsensitiveReplace("that's", "that is", inputobj)
 
                 # Preprocessing step: Some 20-or-so cards use 'each' before a verb to emphasize that a subject is plural
                 # For our purposes, this is just syntactic sugar, so we will remove it. Examples include:

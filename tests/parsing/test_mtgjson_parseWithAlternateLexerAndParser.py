@@ -30,7 +30,7 @@ class TestGrammarAndParser(unittest.TestCase):
             lexerType = lexerTypeToUse
         else:
             integratedGrammar = oldGrammar.getGrammar()
-            lexerType = "dynamic"
+            lexerType = "basic"
 
         if testAgainstFoundations and skipCardsThatPreviouslyPassed:
             if os.path.exists("tests/parsing/foundationsPassedCardList.tmp"):
@@ -49,6 +49,11 @@ class TestGrammarAndParser(unittest.TestCase):
         parser = compilerUsingIntegratedGrammar.getParser()
         preprocessor = compilerUsingIntegratedGrammar.getPreprocessor()
         cardsToTest = [
+            ("Curator of Destinies Snippet", "Put that pile into your hand and the other into your graveyard."),
+            ("Squad Rallier Snippet", "{2}{W}: Look at the top four cards of your library."),
+            ("Landfall Parsing Test", "Landfall — Draw a card."),
+            ("Grappling Kraken Snippet","Whenever a land you control enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)"),
+            ("Vanguard Seraph Snippet", "Whenever you gain life for the first time each turn, surveil 1."),
             ("Joust Through Snippet", "~ deals 3 damage to target attacking or blocking creature."),
             ("Bant Snippet", "Put a divinity counter on target green, white, or blue creature."),
             ("Luminous Rebuke Snippet", "This spell costs {3} less to cast if it targets a tapped creature. Destroy target creature."),
@@ -103,7 +108,7 @@ class TestGrammarAndParser(unittest.TestCase):
             print(f"Parsing {cardName} ({i}/{len(cardsToTest)})...")
             cardPrettyPrint = card.replace('\n', ' ')
             try:
-                if shouldOutputVerboseDetails and lexerType != "dynamic":
+                if shouldOutputVerboseDetails and lexerType != "dynamic" and lexerType != "dynamic_complete":
                     getLexerResults(card,cardName)
             except Exception as lexingException:
                 lexingException = str(lexingException)[0:200]
@@ -121,7 +126,7 @@ class TestGrammarAndParser(unittest.TestCase):
                     ambiguityTreeSizeStatement = ""
                 if shouldOutputVerboseDetails:
                     print(parseTree.pretty())
-                print(f"Card {cardName} ({cardPrettyPrint}) took {fullParseTimeEnd - fullParseTimeStart} to parse. The input had {len(ambiguities)} ambiguities. {ambiguityTreeSizeStatement}")
+                print(f"Card {cardName} ({cardPrettyPrint}) took {fullParseTimeEnd - fullParseTimeStart} seconds to parse. The input had {len(ambiguities)} ambiguities. {ambiguityTreeSizeStatement}")
                 if testAgainstFoundations and skipCardsThatPreviouslyPassed:
                     passedCardsList.append(cardName)
                     passedCardsFile.write(f"{cardName}\n")

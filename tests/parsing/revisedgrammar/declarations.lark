@@ -59,7 +59,7 @@ declarationdecorator.5: "each"i PREPOSITION_OF? -> eachdecorator
 //There can be limited nesting of declarations inside definitions like with possessives ("its *owner's* hand") and prepositions
 //("a creature *with a +1/+1 counter* *on it*").
 declarationdefinition.5: declarationdefinition_standardorder
-declarationdefinition_standardorder.10: possessiveclarationreference* valueterm? powertoughnessterm? modifierterm* (colorterm | damageterm | playerterm | typeterm | powertoughnessterm | loyaltycostterm | tapuntapsymbol | zoneterm | timeterm | valueterm | characteristicterm | qualifierterm | cointerm | diceterm | variableterm | quotedabilityterm | targetasnoun)+ (prepositionalattacheddeclaration | declarationverbexpression)*
+declarationdefinition_standardorder.10: possessiveclarationreference* valueterm? powertoughnessterm? modifierterm* (colorterm | damageterm | playerterm | typeterm | powertoughnessterm | loyaltycostterm | tapuntapsymbol | zoneterm | timeterm | valueterm | characteristicterm | qualifierterm | cointerm | diceterm | VARIABLETERM | quotedabilityterm | targetasnoun)+ (prepositionalattacheddeclaration | declarationverbexpression)*
 | anytargetterm
 | valueterm? counterterm
 | nameterm
@@ -70,13 +70,13 @@ declarationverbexpression: PRONOUN_THAT? (decorateddeclaration | nakedreferenced
 | PRONOUN_THAT? (reservedverbverb | simpleverb) "not"? (decorateddeclaration | nakedreferencedeclaration)
 
 //This declaration definition rule is only used inside of compound declarations.
-compounddeclarationdefinition_arbitraryorder: (modifierterm | colorterm | damageterm | playerterm | typeterm | powertoughnessterm | loyaltycostterm | tapuntapsymbol | zoneterm | timeterm | valueterm | characteristicterm | qualifierterm | cointerm | diceterm | variableterm | quotedabilityterm | targetasnoun)+ (prepositionalattacheddeclaration | declarationverbexpression)*
+compounddeclarationdefinition_arbitraryorder: (modifierterm | colorterm | damageterm | playerterm | typeterm | powertoughnessterm | loyaltycostterm | tapuntapsymbol | zoneterm | timeterm | valueterm | characteristicterm | qualifierterm | cointerm | diceterm | VARIABLETERM | quotedabilityterm | targetasnoun)+ (prepositionalattacheddeclaration | declarationverbexpression)*
 
 
 
 //TODO: Temporarily expanded prepositionalattacheddeclaration to include expressions like 'damage that *would be dealt*'. Need to clean up this rule.
 prepositionalattacheddeclaration.5: declarationpreposition expressionordeclaration
-declarationpreposition.2: ONLY? (PREPOSITION_OF | PREPOSITION_ON | PREPOSITION_WHO | PREPOSITION_IN | PREPOSITION_UNDER | PREPOSITION_WITHOUT | PREPOSITION_WITH | PREPOSITION_AS | PREPOSITION_EXCEPT | PREPOSITION_TO | PRONOUN_THAT)
+declarationpreposition.2: ONLY? (PREPOSITION_OF | PREPOSITION_ON | PREPOSITION_WHO | PREPOSITION_IN | PREPOSITION_UNDER | PREPOSITION_WITHOUT | PREPOSITION_WITH | PREPOSITION_AS | PREPOSITION_EXCEPT | PREPOSITION_TO | PRONOUN_THAT | PREPOSITION_AMONG)
 possessiveclarationreference.5: (declarationdefinition_standardorder | namereferencedefinition) ("'s"|"'")
 specialterm.5: MECHANICSPECIFICTERM
 MECHANICSPECIFICTERM.5: "ring"i //Example: "the *ring* has tempted you two or more times this game"
@@ -109,7 +109,7 @@ colorterm.5: negationofterm? COLOR
 
 //Rules for terms that don't stand by themselves but refer to something else on the card, like "this *way* (the way just described)"
 //Or "if *able* (able to block)".
-variableterm.20: "beginning"i //Example: "the *beginning* of your next upkeep"
+VARIABLETERM.20: "beginning"i //Example: "the *beginning* of your next upkeep"
 | "both"i //Example(s): "you may choose *both*"
 | "choice"i["s"i] //Example(s): "their *choice*", "of your *choice*"
 | "end"i //Example: "until *end* of turn"
@@ -117,7 +117,7 @@ variableterm.20: "beginning"i //Example: "the *beginning* of your next upkeep"
 | "pile"i["s"i] //Example: "target opponent looks at the top three cards of your library and separates them into a face-down pile and a face-up pile."
 | "rest"i //Example: "You have no maximum hand size for the *rest* of the game."
 | "result"i["s"] //Example: "draw cards equal to the *result*"
-| "time"i["s"i] //Example(s): "the number of *times* ~ was kicked", "the first time this turn"
+| "time"i["s"i] //Example(s): "the number of *times* ~ was kicked", "the first time this turn", "the first time each turn"
 | VOTEPRESENT //Example(s): "each *vote* they receive"
 | "way"i //Example: "Creatures destroyed this *way* can't be regenerated."
 | COPYPRESENT //Example(s): "You may have Shapeshifters you control become *copies* of that creature", "choose new targets for the *copy*"
@@ -451,7 +451,7 @@ subtype.5: SUBTYPESPELL | SUBTYPELAND | SUBTYPEARTIFACT | SUBTYPEENCHANTMENT | S
 SUPERTYPE.5: "basic"i | "legendary"i | "ongoing"i | "snow"i | "world"i
 DAMAGETYPE.10: "damage"i | "combat damage" | "excess damage"
 ABILITYMODIFIER.5: "mana"i | "loyalty"i | "intrinsic"i //Example(s): "*mana* abilities", "*loyalty* abilities", "this permanent has the *intrinsic* mana ability '{T}: Add {W}.'"
-RELATIVEMODIFIER.10: "next"i | "additional"i | "extra"i | "top"i | "bottom"i | "new"i //Example(s): "an *additional* +1/+1 counter", "take an *extra* turn"
+RELATIVEMODIFIER.10: "next"i | "additional"i | "extra"i | "top"i | "bottom"i | "new"i | "random"i //Example(s): "an *additional* +1/+1 counter", "take an *extra* turn"
 playerstatusmodifier.5: negationofterm? "active"i | "defending"i //Example(s): "the *active* player", "the *defending* player"
 KEYWORDSTATUSMODIFIER.5: "paired"i | "face-up" | "face-down" //TODO.5: This will need to be generalized more.
 | "fortified"i | "monstrous"i

@@ -10,7 +10,7 @@ keywordlist.5: keywordabilitydeclaration (("," | ";") keywordabilitydeclaration)
 
 statement.5: statementwithouttrailingsubstatements "." | standaloneconditionalstatement "." | compoundstatement "." | modalstatement
 
-statementwithouttrailingsubstatements.5: statementexpression
+statementwithouttrailingsubstatements.5: expression
 
 activationstatement.5: expressionordeclaration ("," expressionordeclaration)* ":" statementblock
 modalstatement.5:  CHOOSEPRESENT expressionordeclaration DASH modalchoicestatement (NEWLINE modalchoicestatement)+
@@ -20,14 +20,14 @@ compoundstatement.5: (statementwithouttrailingsubstatements | compoundconditiona
 | (statementwithouttrailingsubstatements | compoundconditionalstatement) ("," (statementwithouttrailingsubstatements | compoundconditionalstatement))* ","? CONJUNCTION_AND (statementwithouttrailingsubstatements | standaloneconditionalstatement) -> compoundandstatement
 | (statementwithouttrailingsubstatements | compoundconditionalstatement) ("," (statementwithouttrailingsubstatements | compoundconditionalstatement))* ","? CONJUNCTION_OR (statementwithouttrailingsubstatements | standaloneconditionalstatement) -> compoundorstatement
 
-compoundconditionalstatement.5: (condition statementexpression)+
-| statementexpression condition -> compoundconditionalinv
+compoundconditionalstatement.5: (condition expression)+
+| expression condition -> compoundconditionalinv
 | conditionalresult postfixexpression -> compoundconditionalresult
 
-standaloneconditionalstatement.5: (PREPOSITION_THEN | PREPOSITION_INSTEAD)? (condition statementexpression)+ postfixexpression? "," (PREPOSITION_THEN | PREPOSITION_INSTEAD)? (conditionalresult postfixexpression? | standaloneconditionalstatement)
-| (PREPOSITION_THEN | PREPOSITION_INSTEAD)? statementexpression condition statementexpression postfixexpression?
+standaloneconditionalstatement.5: (PREPOSITION_THEN | PREPOSITION_INSTEAD)? (condition expression)+ postfixexpression? "," (PREPOSITION_THEN | PREPOSITION_INSTEAD)? (conditionalresult postfixexpression? | standaloneconditionalstatement)
+| (PREPOSITION_THEN | PREPOSITION_INSTEAD)? expression condition expression postfixexpression?
 conditionalresult.5: statementwithouttrailingsubstatements
-postfixexpression.5: PREPOSITION_INSTEAD | PREPOSITION_RATHER statementwithouttrailingsubstatements | condition statementexpression | postfixexpression (CONJUNCTION_AND | CONJUNCTION_OR | CONJUNCTION_ANDOR) postfixexpression
+postfixexpression.5: PREPOSITION_INSTEAD | PREPOSITION_RATHER statementwithouttrailingsubstatements | condition expression | postfixexpression (CONJUNCTION_AND | CONJUNCTION_OR | CONJUNCTION_ANDOR) postfixexpression
 
 condition.5: ONLY? (PREPOSITION_IF | PREPOSITION_WHENEVER | PREPOSITION_WHEN | PREPOSITION_AS
 | PREPOSITION_UNTIL | PREPOSITION_AFTER | PREPOSITION_OTHERWISE | PREPOSITION_UNLESS | PREPOSITION_WHILE
@@ -36,16 +36,16 @@ condition.5: ONLY? (PREPOSITION_IF | PREPOSITION_WHENEVER | PREPOSITION_WHEN | P
 ONLY.5: "only"i
 //Prepositions are variously used by statements (like conditional statements such as "*if* you control a wizard")
 //expressions (like "return target card *from* your graveyard *to* your hand" and declarations (creatures *with* haste). We list them out here.
-PREPOSITION.5: PREPOSITION_AFTER | PREPOSITION_AMONG | PREPOSITION_AS | PREPOSITION_AT | PREPOSITION_BEFORE
-| PREPOSITION_DURING | PREPOSITION_EXCEPT | PREPOSITION_FOR | PREPOSITION_FROM | PREPOSITION_HOW | PREPOSITION_IF
+preposition.5: PREPOSITION_AFTER | PREPOSITION_AMONG | PREPOSITION_AS | PREPOSITION_AT | PREPOSITION_BEFORE
+| PREPOSITION_DURING | PREPOSITION_EXCEPT | PREPOSITION_FOR | PREPOSITION_FROM | PREPOSITION_HOW | PREPOSITION_OF | PREPOSITION_IF
 | PREPOSITION_IN | PREPOSITION_INSTEAD | PREPOSITION_INTO | PREPOSITION_OF
 | PREPOSITION_ON | PREPOSITION_ONTO | PREPOSITION_OTHERWISE | PREPOSITION_RATHER
-| PREPOSITION_THEN | PREPOSITION_TO | PREPOSITION_UNDER | PREPOSITION_UNLESS | PREPOSITION_UNTIL
+| PREPOSITION_THEN | PREPOSITION_THOUGH | PREPOSITION_TO | PREPOSITION_UNDER | PREPOSITION_UNLESS | PREPOSITION_UNTIL
 | PREPOSITION_WHEN | PREPOSITION_WHENEVER | PREPOSITION_WHILE | PREPOSITION_WHO | PREPOSITION_WITHOUT
 
 PREPOSITION_AFTER.5: "after"i
-PREPOSITION_AS.5: "as"i ("though"i | "long as"i)?
-PREPOSITION_AMONG: "among"i
+PREPOSITION_AS.5: "as"i (PREPOSITION_THOUGH | "long as"i)?
+PREPOSITION_AMONG: PREPOSITION_FROM? "among"i
 PREPOSITION_AT.5: "at"i
 PREPOSITION_BEFORE.5: "before"i
 PREPOSITION_DURING.5: "during"i
@@ -61,8 +61,10 @@ PREPOSITION_OF.5: "of"i
 PREPOSITION_ON.0: "on"i
 PREPOSITION_ONTO.10: "onto"i
 PREPOSITION_OTHERWISE.5: "otherwise"i
-PREPOSITION_RATHER.5: "rather"i "than"i?
+PREPOSITION_RATHER.5: "rather"i PREPOSITION_THAN?
 PREPOSITION_THEN.5: "then"i
+PREPOSITION_THAN.5: "than"i
+PREPOSITION_THOUGH.5: "though"i
 PREPOSITION_TO.1: "to"i
 PREPOSITION_UNDER.5: "under"i
 PREPOSITION_UNLESS.5: "unless"i
@@ -81,10 +83,6 @@ CONJUNCTION_ANDOR.5: "and/or"i
 CONJUNCTION_NOR.1: "nor"i
 CONJUNCTION_NEITHER.5: "neither"i
 
-
-
-
-statementexpression.5: expression
 
 ARBITRARYWORD.0: WORD //TODO
 DASH.100: "‒" | "—"
