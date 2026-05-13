@@ -1,9 +1,60 @@
 [build-system]
-# AVOID CHANGING REQUIRES: IT WILL BE UPDATED BY PYSCAFFOLD!
-requires = ["setuptools>=46.1.0", "setuptools_scm[toml]>=5"]
+requires = ["setuptools>=61", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "mtgcompiler"
+description = "Compiler infrastructure for Magic: the Gathering card text."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE.txt" }
+authors = [
+    { name = "Reed Milewicz", email = "rmmilewi@gmail.com" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+]
+dynamic = ["version"]
+dependencies = [
+    "lark==1.2.2",
+    "num2words==0.5.13",
+    "tqdm==4.64.0",
+    "pandas==2.2.2",
+]
+
+[project.optional-dependencies]
+testing = [
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+
+[project.scripts]
+mtgcompiler = "mtgcompiler.cli:main"
+
+[project.urls]
+Documentation = "https://pyscaffold.org/"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests*"]
+namespaces = true
+
+[tool.setuptools.package-data]
+mtgcompiler = [
+    "frontend/grammarian/grmgrammar.lark",
+    "frontend/grammarian/magicspec/**/*.grm",
+]
+
 [tool.setuptools_scm]
-# For smarter version schemes and other configuration options,
-# check out https://github.com/pypa/setuptools_scm
 version_scheme = "no-guess-dev"
+local_scheme = "no-local-version"
+fallback_version = "0.0.0"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
